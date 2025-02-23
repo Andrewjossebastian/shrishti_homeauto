@@ -1,44 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home Automation Shristi 2025</title>
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
-  
+
   <style>
+    /* General Styles */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
     }
+
+    h1 {
+      background: #007BFF;
+      color: white;
+      padding: 15px;
+      margin: 0;
+    }
+
+    p {
+      color: #333;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    /* LED Control Section */
     .led-control {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 20px;
+      padding: 20px;
     }
+
     .led-container {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin: 10px;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 400px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 10px 0;
+      box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
     }
+
+    .led-container p {
+      margin: 0;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Buttons */
     button {
-      padding: 10px 20px;
+      padding: 12px 16px;
       font-size: 16px;
       margin: 5px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      width: 45%;
+      transition: 0.3s;
     }
+
     .onButton {
       background-color: green;
       color: white;
     }
+
     .offButton {
       background-color: red;
       color: white;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    /* Notification Message */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .show {
+      opacity: 1;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .led-container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      button {
+        width: 80%;
+      }
     }
   </style>
 </head>
@@ -48,34 +122,31 @@
   <p>Control the LEDs using Firebase.</p>
 
   <div class="led-control">
-    <!-- LED 1 Controls -->
+    <!-- LED Controls -->
     <div class="led-container">
-      <p>LED 1 (D5): </p>
+      <p>LED 1 (D5):</p>
       <button class="onButton" onclick="controlLED('led1', 'on')">ON</button>
       <button class="offButton" onclick="controlLED('led1', 'off')">OFF</button>
     </div>
-
-    <!-- LED 2 Controls -->
     <div class="led-container">
-      <p>LED 2 (D4): </p>
+      <p>LED 2 (D4):</p>
       <button class="onButton" onclick="controlLED('led2', 'on')">ON</button>
       <button class="offButton" onclick="controlLED('led2', 'off')">OFF</button>
     </div>
-
-    <!-- LED 3 Controls -->
     <div class="led-container">
-      <p>LED 3 (D2): </p>
+      <p>LED 3 (D2):</p>
       <button class="onButton" onclick="controlLED('led3', 'on')">ON</button>
       <button class="offButton" onclick="controlLED('led3', 'off')">OFF</button>
     </div>
-
-    <!-- LED 4 Controls -->
     <div class="led-container">
-      <p>LED 4 (D23): </p>
+      <p>LED 4 (D23):</p>
       <button class="onButton" onclick="controlLED('led4', 'on')">ON</button>
       <button class="offButton" onclick="controlLED('led4', 'off')">OFF</button>
     </div>
   </div>
+
+  <!-- Notification Message -->
+  <div id="notification" class="notification"></div>
 
   <script>
     // Firebase configuration
@@ -94,15 +165,25 @@
     const app = firebase.initializeApp(firebaseConfig);
     const database = firebase.database(app);
 
+    // Function to show notification
+    function showNotification(message) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.classList.add("show");
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 2000);
+    }
+
     // Function to update Firebase when LED button is clicked
     function controlLED(led, state) {
       firebase.database().ref(`kickbike/command/${led}`).set(state)
         .then(() => {
-          alert(`LED ${led} turned ${state.toUpperCase()}`);
+          showNotification(`LED ${led} turned ${state.toUpperCase()}`);
         })
         .catch((error) => {
           console.error('Error updating Firebase:', error);
-          alert('Failed to update Firebase.');
+          showNotification('Failed to update Firebase.');
         });
     }
   </script>

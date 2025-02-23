@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home Automation Shristi 2025</title>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+  
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .led-control {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .led-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .onButton {
+      background-color: green;
+      color: white;
+    }
+    .offButton {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Home Automation Shristi 2025</h1>
+  <p>Control the LEDs using Firebase.</p>
+
+  <div class="led-control">
+    <!-- LED 1 Controls -->
+    <div class="led-container">
+      <p>LED 1 (D5): </p>
+      <button class="onButton" onclick="controlLED('led1', 'on')">ON</button>
+      <button class="offButton" onclick="controlLED('led1', 'off')">OFF</button>
+    </div>
+
+    <!-- LED 2 Controls -->
+    <div class="led-container">
+      <p>LED 2 (D4): </p>
+      <button class="onButton" onclick="controlLED('led2', 'on')">ON</button>
+      <button class="offButton" onclick="controlLED('led2', 'off')">OFF</button>
+    </div>
+
+    <!-- LED 3 Controls -->
+    <div class="led-container">
+      <p>LED 3 (D2): </p>
+      <button class="onButton" onclick="controlLED('led3', 'on')">ON</button>
+      <button class="offButton" onclick="controlLED('led3', 'off')">OFF</button>
+    </div>
+
+    <!-- LED 4 Controls -->
+    <div class="led-container">
+      <p>LED 4 (D23): </p>
+      <button class="onButton" onclick="controlLED('led4', 'on')">ON</button>
+      <button class="offButton" onclick="controlLED('led4', 'off')">OFF</button>
+    </div>
+  </div>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPBxUbUF_d5VuDJoBCRuMtLIKIZp7yJwU",
+      authDomain: "e-kickbike.firebaseapp.com",
+      databaseURL: "https://e-kickbike-default-rtdb.firebaseio.com",
+      projectId: "e-kickbike",
+      storageBucket: "e-kickbike.firebasestorage.app",
+      messagingSenderId: "1001690866712",
+      appId: "1:1001690866712:web:213dff12eec8d41adf4f6d",
+      measurementId: "G-LD6T8FHX8F"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const database = firebase.database(app);
+
+    // Function to update Firebase when LED button is clicked
+    function controlLED(led, state) {
+      firebase.database().ref(`kickbike/command/${led}`).set(state)
+        .then(() => {
+          alert(`LED ${led} turned ${state.toUpperCase()}`);
+        })
+        .catch((error) => {
+          console.error('Error updating Firebase:', error);
+          alert('Failed to update Firebase.');
+        });
+    }
+  </script>
+
+</body>
+</html>
